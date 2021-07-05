@@ -1,0 +1,22 @@
+.hidden {
+    display: none !important;
+}
+.alertSuccess {
+    margin-top: 15px;
+}
+.hiddenInputImgae {
+    visibility: hidden;
+}
+.reviewImg{
+    width: 100px !important;
+    height: 100px !important;
+    display: inline-flex !important;
+    margin-left: 100px !important;
+}
+
+@media only screen and (max-width: 480px){
+    .errOnMobile{
+        width: 75%;
+        height: 75%;
+    }
+}
