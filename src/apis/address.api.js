@@ -3,7 +3,6 @@ import AxiosClient from './AxiosClient';
 const addressApi = {
     getProvinceCity: async () => {
         const res = await AxiosClient.get("province_city");
-        console.log(res.data)
         return res.data;
     },
     getDistrict: async (cityId) => {

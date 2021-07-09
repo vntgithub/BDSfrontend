@@ -17,7 +17,6 @@ import Alert from '@material-ui/lab/Alert';
 import { signIn } from "../slices/user"
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-import { AxiosClient } from '../apis/AxiosClient';
 import { useHistory } from 'react-router-dom';
 
 function Copyright() {

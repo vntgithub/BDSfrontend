@@ -48,13 +48,17 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  centerContent: {
+    display: "flex",
+    justifyContent: "center"
+  }
 }));
 
 export default function SignUpPage() {
   const classes = useStyles();
   
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="sm">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -103,6 +107,17 @@ export default function SignUpPage() {
                 variant="outlined"
                 required
                 fullWidth
+                id="email"
+                label="Phone numbers"
+                name="phoneNumbers"
+                autoComplete="phoneNumber"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"
@@ -112,15 +127,17 @@ export default function SignUpPage() {
             </Grid>
             
           </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign Up
-          </Button>
+          <Grid sm={12} className={classes.centerContent}>
+            <Button
+              
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sign Up
+            </Button>
+          </Grid>
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="/signin" variant="body2">

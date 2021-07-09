@@ -49,7 +49,6 @@ export default function SimpleSelect() {
 
   const fetchStreet = async (wardId) => {
       const data = await addressApi.getStreet(wardId)
-      console.log(data)
       setStreet(data)
   }
 

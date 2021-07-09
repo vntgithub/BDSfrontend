@@ -9,6 +9,8 @@ import SignupPage from "./pages/Signup.Page";
 import SignPage from "./pages/Signin.Page";
 import HomePage from "./pages/Home.Page";
 
+import "./App.css";
+
 function App() {
   return (
     <Router>
