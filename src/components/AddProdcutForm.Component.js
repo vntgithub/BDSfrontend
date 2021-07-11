@@ -13,7 +13,7 @@ import Container from '@material-ui/core/Container';
 
 import RadioTypeProduct from '../components/RadioTypeProduct.Coponent';
 import AddressSelect from '../components/AddressSelect.Component';
-import RadioCategoryProduct from './ListCategory.Component';
+import ListCategory from './ListCategory.Component';
 
 function Copyright() {
   return (
@@ -49,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
   centerContent: {
     display: "flex",
     justifyContent: "center"
+  },
+  miniInput: {
+      width: 150,
+      margin: theme.spacing(1)
   }
 }));
 
@@ -155,34 +159,70 @@ const validData = () => {
             <Grid item xs={12} sm={12}>
               <AddressSelect />
             </Grid>
-            {/* <Grid item xs={12} sm={12}>
-              <RadioCategoryProduct />
-            </Grid> */}
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
+            <Grid item xs={12} sm={12}>
+              <ListCategory />
             </Grid>
             <Grid item xs={12}>
               <TextField
+                className={classes.miniInput}
+                variant="outlined"
+                required
+                type="number"
+                id="numfloors"
+                label="Number of floors"
+                autoComplete="numberoffloors"
+              />
+              <TextField
+                className={classes.miniInput}
+                variant="outlined"
+                required
+                label="Number of WC"
+                type="number"
+                id="numofWC"
+                autoComplete="numWC"
+              />
+              <TextField
+                className={classes.miniInput}
+                variant="outlined"
+                required
+                label="Frontispiece"
+                type="number"
+                id="frontispiece"
+                autoComplete="frontispiece"
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                autoComplete="funiture"
                 variant="outlined"
                 required
                 fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
+                id="funiture"
+                label="Funiture"
+                multiline
+                rows={3}
+                rowsMax={7}
+                autoFocus
               />
+
             </Grid>
-            
+            <Grid item xs={12} sm={12}>
+              <TextField
+                autoComplete="legalInfor"
+                variant="outlined"
+                required
+                fullWidth
+                id="legalInfor"
+                label="Legal information"
+                multiline
+                rows={5}
+                rowsMax={10}
+                autoFocus
+              />
+
+            </Grid>
           </Grid>
+
           <Grid sm={12} className={classes.centerContent}>
             <Button
               
