@@ -14,6 +14,8 @@ import Container from '@material-ui/core/Container';
 import RadioTypeProduct from '../components/RadioTypeProduct.Coponent';
 import AddressSelect from '../components/AddressSelect.Component';
 import ListCategory from './ListCategory.Component';
+import { useSelector } from 'react-redux';
+import ImageButton from "../components/ImageUpload.Component"
 
 function Copyright() {
   return (
@@ -57,9 +59,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddProductForm(props) {
+  const userId = useSelector(state => state.user.data.id)
   const classes = useStyles();
   const { open } = props;
-
   const [data, setData] = useState({
     title: "",
     lease: true,
@@ -67,29 +69,14 @@ export default function AddProductForm(props) {
     descreption: "",
     phoneNumber: "",
     address: {
-            provinceCity: {
-                id: -1,
-                name: ""
-            },
-            district: {
-                id: -1,
-                name: ""
-            },
-            ward:{
-                id: -1,
-                name: ""
-            },
-            street: {
-                id: -1,
-                name: ""
-            }
-        },
-    category:{
-        id: -1,
-        name: ""
+      provinceCity: {id: -1},
+      district: {id: -1},
+      ward:{id: -1},
+      street: {id: -1}
     },
+    category:{id: -1},
     images: [],
-    user: {id: -1},
+    user: {id: userId},
     frontispiece: -1,
     numberOfFloors: -1,
     numberOfWC: -1,
@@ -97,10 +84,69 @@ export default function AddProductForm(props) {
     legalInfor: ""
 })
   
+  const validData = () => {
+    let check = true;
+    const title = document.getElementById('title').value
+    const price = document.getElementById('price').value
+    const descreption = document.getElementById('descreption').value
+    const phoneNumbers = document.getElementById('phoneNumbers').value
+    const numberOfFloors = document.getElementById('numfloors').value
+    const numberOfWC = document.getElementById('numWC').value
+    const frontispiece = document.getElementById('frontispiece').value
+    const funiture = document.getElementById('funiture').value
+    const legalInfor = document.getElementById('legalInfor').value
 
-const validData = () => {
+    if(title === '' || title === null)
+      check &= false;
 
-}
+    if(price === '' || price === null)
+      check &= false;
+
+    if(descreption === '' || descreption === null)
+      check &= false;
+    
+    if(phoneNumbers === '' || phoneNumbers === null)
+      check &= false;
+
+    if(numberOfFloors === '' || numberOfFloors === null)
+      check &= false;
+
+    if(numberOfWC === '' || numberOfWC === null)
+      check &= false;
+
+    if(frontispiece === '' || frontispiece === null)
+      check &= false;
+
+    if(funiture === '' || funiture === null)
+      check &= false;
+
+    if(legalInfor === '' || legalInfor === null)
+      check &= false;
+
+    if(data.address.street.id === -1)
+      check &= false;
+    
+    if(check){
+      setData({...data, 
+        title: "",
+        price: price,
+        descreption: descreption,
+        phoneNumber: phoneNumbers,
+        frontispiece: frontispiece,
+        numberOfFloors: numberOfFloors,
+        numberOfWC: numberOfWC,
+        funiture: funiture,
+        legalInfor: legalInfor
+      })
+    }
+
+    return check;
+  }
+  const addProduct = () => {
+    console.log(validData())
+  }
+
+
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
@@ -116,12 +162,23 @@ const validData = () => {
             <Grid item xs={12} sm={12}>
               <TextField
                 autoComplete="ptitle"
-                name="Title"
                 variant="outlined"
                 required
                 fullWidth
                 id="title"
                 label="Title"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                autoComplete="price"
+                variant="outlined"
+                required
+                fullWidth
+                id="price"
+                type="number"
+                label="Price"
                 autoFocus
               />
             </Grid>
@@ -147,20 +204,19 @@ const validData = () => {
                 variant="outlined"
                 required
                 fullWidth
-                id="email"
+                id="phoneNumbers"
                 label="Phone numbers"
-                name="phoneNumbers"
                 autoComplete="phoneNumber"
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <RadioTypeProduct />
+              <RadioTypeProduct data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <AddressSelect />
+              <AddressSelect data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ListCategory />
+              <ListCategory data={data} setData={setData} />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -178,7 +234,7 @@ const validData = () => {
                 required
                 label="Number of WC"
                 type="number"
-                id="numofWC"
+                id="numWC"
                 autoComplete="numWC"
               />
               <TextField
@@ -221,12 +277,14 @@ const validData = () => {
               />
 
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <ImageButton />
+            </Grid>
           </Grid>
 
           <Grid sm={12} className={classes.centerContent}>
             <Button
-              
-              type="submit"
+              onClick={addProduct}
               variant="contained"
               color="primary"
               className={classes.submit}

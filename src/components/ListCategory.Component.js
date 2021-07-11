@@ -17,18 +17,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ListCategory() {
+export default function ListCategory(props) {
   const classes = useStyles();
-  const [data, setData] = useState([])
-  const [value, setValue] = useState(0)
+  const { data, setData } = props;
+  const [listCategory, setListCategory] = useState([])
+  const [value, setValue] = useState("")
 
   const handleChange = (event) => {
+    setData({...data, category: {id: event.target.value}})
     setValue(event.target.value);
   };
 
   const fetchCategory = async () => {
       const resData = await categoryApi.getAll();
-      setData(resData)
+      setListCategory(resData)
   }
   useEffect(() => {
     fetchCategory()
@@ -47,7 +49,10 @@ export default function ListCategory() {
           value={value}
           onChange={handleChange}
         >
-            {data.map((item, index) => 
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+            {listCategory.map((item, index) => 
                 <MenuItem key={index} value={parseInt(item.id)}>{item.name}</MenuItem>
 
             )}

@@ -17,20 +17,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleSelect() {
+export default function SimpleSelect(props) {
   const classes = useStyles();
 
   const [provinceCity, setProvinceCity] = useState([]);
-  const [pCId, setPCId] = useState(0);
+  const [pCId, setPCId] = useState("");
 
   const [district, setDistrict] = useState([]);
-  const [districtId, setDistrictId] = useState(0);
+  const [districtId, setDistrictId] = useState("");
 
   const [ward, setWard] = useState([]);
-  const [wardId, setWardId] = useState(0);
+  const [wardId, setWardId] = useState("");
 
   const [street, setStreet] = useState([]);
-  const [streetId, setStreetId] = useState(0);
+  const [streetId, setStreetId] = useState("");
 
   const fetchCity = async () => {
       const data = await addressApi.getProvinceCity();
@@ -38,18 +38,24 @@ export default function SimpleSelect() {
   }
 
   const fetchDistrict = async (provinceCityId) => {
-      const data = await addressApi.getDistrict(provinceCityId)
-      setDistrict(data)
+      if(provinceCityId !== ""){
+        const data = await addressApi.getDistrict(provinceCityId)
+        setDistrict(data)
+      }
   }
 
   const fetchWard = async (districtId) => {
-      const data = await addressApi.getWard(districtId)
-      setWard(data)
+      if(districtId !== ""){
+        const data = await addressApi.getWard(districtId)
+        setWard(data)
+      }
   }
 
   const fetchStreet = async (wardId) => {
-      const data = await addressApi.getStreet(wardId)
-      setStreet(data)
+      if(wardId !== ""){
+        const data = await addressApi.getStreet(wardId)
+        setStreet(data)
+      }
   }
 
   useEffect(() => {
@@ -69,10 +75,34 @@ export default function SimpleSelect() {
   }, [wardId])
 
 
-  const handleChangeCity = (event) => setPCId(event.target.value);
+  const handleChangeCity = (event) => {
+    if(event.target.value === ""){
+      setDistrict([])
+    }
+    setPCId(event.target.value)
+  }
   const handleChangeDistrict = (event) => setDistrictId(event.target.value);
   const handleChangeWard = (event) => setWardId(event.target.value);
-  const handleChangeStreet = (event) => setStreetId(event.target.value);
+  const handleChangeStreet = (event) => {
+    if(props.hasOwnProperty('data')){
+      const { data, setData } = props;
+      setData({...data, address: {
+        provinceCity: {
+          id: pCId,
+        },
+        district: {
+            id: districtId,
+        },
+        ward:{
+            id: wardId,
+        },
+        street: {
+            id: event.target.value,
+      }
+      }})
+    }
+    setStreetId(event.target.value)
+  }
   
 
   return (
@@ -86,6 +116,9 @@ export default function SimpleSelect() {
           value={pCId}
           onChange={handleChangeCity}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
             {provinceCity.map((item, index) => 
                 <MenuItem key={index} value={parseInt(item.id)}>{item.name}</MenuItem>
 
@@ -100,6 +133,9 @@ export default function SimpleSelect() {
           value={districtId}
           onChange={handleChangeDistrict}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {district.map((item, index) => 
             <MenuItem key={index} value={parseInt(item.id)}>{item.name}</MenuItem>
           )}
@@ -113,6 +149,9 @@ export default function SimpleSelect() {
           value={wardId}
           onChange={handleChangeWard}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {ward.map((item, index) => 
             <MenuItem key={index} value={parseInt(item.id)}>{item.name}</MenuItem>
           )}
@@ -126,6 +165,9 @@ export default function SimpleSelect() {
           value={streetId}
           onChange={handleChangeStreet}
         >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
           {street.map((item, index) => 
             <MenuItem key={index} value={parseInt(item.id)}>{item.name}</MenuItem>
           )}
