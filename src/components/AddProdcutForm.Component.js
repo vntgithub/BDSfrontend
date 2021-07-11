@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,9 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import  MaterialUIPickers  from '../components/MaterialUIPickers.Component';
-import RadioGroupGender from '../components/RadioGroupGender.Component';
+import RadioTypeProduct from '../components/RadioTypeProduct.Coponent';
 import AddressSelect from '../components/AddressSelect.Component';
+import RadioCategoryProduct from './ListCategory.Component';
 
 function Copyright() {
   return (
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(3),
   },
   centerContent: {
     display: "flex",
@@ -52,9 +52,51 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SignUpPage() {
+export default function AddProductForm(props) {
   const classes = useStyles();
+  const { open } = props;
+
+  const [data, setData] = useState({
+    title: "",
+    lease: true,
+    price: -1,
+    descreption: "",
+    phoneNumber: "",
+    address: {
+            provinceCity: {
+                id: -1,
+                name: ""
+            },
+            district: {
+                id: -1,
+                name: ""
+            },
+            ward:{
+                id: -1,
+                name: ""
+            },
+            street: {
+                id: -1,
+                name: ""
+            }
+        },
+    category:{
+        id: -1,
+        name: ""
+    },
+    images: [],
+    user: {id: -1},
+    frontispiece: -1,
+    numberOfFloors: -1,
+    numberOfWC: -1,
+    funiture: "",
+    legalInfor: ""
+})
   
+
+const validData = () => {
+
+}
   return (
     <Container component="main" maxWidth="sm">
       <CssBaseline />
@@ -63,32 +105,59 @@ export default function SignUpPage() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Add product
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
-                autoComplete="fname"
-                name="Name"
+                autoComplete="ptitle"
+                name="Title"
                 variant="outlined"
                 required
                 fullWidth
-                id="name"
-                label="Name"
+                id="title"
+                label="Title"
+                autoFocus
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                autoComplete="pDescreption"
+                name="Descreption"
+                variant="outlined"
+                required
+                fullWidth
+                id="descreption"
+                label="Descreption"
+                multiline
+                rows={5}
+                rowsMax={15}
                 autoFocus
               />
 
             </Grid>
-            <Grid item xs={12} sm={12}>
-              <MaterialUIPickers />
+            <Grid item xs={12}>
+              <TextField
+                type="number"
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Phone numbers"
+                name="phoneNumbers"
+                autoComplete="phoneNumber"
+              />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <RadioGroupGender />
+              <RadioTypeProduct />
             </Grid>
             <Grid item xs={12} sm={12}>
               <AddressSelect />
             </Grid>
+            {/* <Grid item xs={12} sm={12}>
+              <RadioCategoryProduct />
+            </Grid> */}
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -98,17 +167,6 @@ export default function SignUpPage() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="email"
-                label="Phone numbers"
-                name="phoneNumbers"
-                autoComplete="phoneNumber"
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,16 +191,17 @@ export default function SignUpPage() {
               color="primary"
               className={classes.submit}
             >
-              Sign Up
+              Add product
+            </Button>
+            <Button
+              onClick={open}
+              variant="contained"
+              className={classes.submit}
+            >
+              Back
             </Button>
           </Grid>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/signin" variant="body2">
-                Already have an account? Sign in
-              </Link>
-            </Grid>
-          </Grid>
+          
         </form>
       </div>
       <Box mt={5}>

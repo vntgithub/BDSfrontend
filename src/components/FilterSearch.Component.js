@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button';
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(2,5,2,2),
-    minWidth: 200,
+    minWidth: 180,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -23,17 +23,17 @@ const useStyles = makeStyles((theme) => ({
   },
   button: {
     margin: theme.spacing(2,5,2,2),
-    width: 200
+    width: 150
   },
   price: {
     margin: theme.spacing(0,5,2,2),
-      width: 200
+      width: 180
   }
 }));
 
 export default function SimpleSelect(props) {
   const classes = useStyles();
-  const {setFilter, search, filter} = props;
+  const {setFilter, search, filter, openAddProductForm} = props;
 
   const [provinceCity, setProvinceCity] = useState([]);
   const [pCId, setPCId] = useState("");
@@ -185,8 +185,6 @@ export default function SimpleSelect(props) {
             )}
             </Select>
         </FormControl>
-      </Grid>
-      <Grid>
         <FormControl className={classes.formControl}>
                 <InputLabel id="Ward">Ward</InputLabel>
                 <Select
@@ -245,10 +243,6 @@ export default function SimpleSelect(props) {
             </Button>
         </FormControl>
       </Grid>
-      <Grid >
-     
-      </Grid>
-      
     </Grid>
   );
 }

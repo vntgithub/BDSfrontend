@@ -1,3 +1,13 @@
 body {
     background-color: #f5f5f5;
 }
+
+.listProduct {
+    display: flex;
+    justify-content: center;
+}
+.containerProduct {
+    display: flex;
+    justify-content: center;
+}
+    

@@ -77,13 +77,13 @@ export default function SignInPage() {
       return;
     }
     const resultAction = await dispatch(signIn(loginData))
-    console.log(resultAction);
     if(!resultAction.payload){
       setErrString(errMessage.accountNotFound);
       setErr(true);
       return;
     }
     const data = unwrapResult(resultAction);
+    localStorage.setItem("token", data.token)
     history.push("/");
     
     

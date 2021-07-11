@@ -4,13 +4,13 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-
+import { Edit, Delete} from '@material-ui/icons/'
 
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(3),  
     display: 'flex',
-    width: 750
+    width: 700
   },
   details: {
     display: 'flex',
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     flex: '1 0 auto',
   },
   cover: {
-    width: 151,
+    width: 250,
   },
   controls: {
     display: 'flex',
@@ -32,6 +32,18 @@ const useStyles = makeStyles((theme) => ({
     height: 38,
     width: 38,
   },
+  ofUser: {
+    margin: theme.spacing(2),
+    marginLeft: 'auto'
+  },
+  icon: {
+    margin: theme.spacing(1),
+    cursor: 'pointer'
+  },
+  containerIcon: {
+    display: 'flex',
+    justifyContent: 'center'
+  }
 }));
 
 export default function MediaControlCard(props) {
@@ -78,8 +90,19 @@ export default function MediaControlCard(props) {
             Address: {address.addressString}
           </Typography>
         </CardContent>
-        
+        {window.location.href.substring(window.location.origin.length) !== '/' &&
+        <div className={classes.ofUser}>
+          <div className={classes.containerIcon} >
+            <div className={classes.icon}>
+              <Edit />
+            </div>
+            <div className={classes.icon}>
+              <Delete />
+            </div>
+          </div>
+      </div>}
       </div>
+     
     </Card>
   );
 }

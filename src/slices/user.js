@@ -9,12 +9,22 @@ export const signIn = createAsyncThunk(
     }
 )
 
+export const signInByToken = createAsyncThunk(
+    'signInByToken',
+    async (token) => {
+        return await userApi.signInByToken(token);
+    }
+)
+
 const userSlice = createSlice({
     name: "user",
     initialState: {data: {}},
     reducers:{},
     extraReducers:{
         [signIn.fulfilled]: (state, action) => {
+            state.data = action.payload;
+        },
+        [signInByToken.fulfilled]: (state, action) => {
             state.data = action.payload;
         }   
     }

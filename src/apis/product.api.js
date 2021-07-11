@@ -14,6 +14,13 @@ const productApi = {
     getNumberOfPage: async () => {
         const res = await AxiosClient.get("product/numberofpage");
         return res.data;
+    },
+    getProductByUserId: async (id) => {
+        if(id){
+            const res = await AxiosClient.get(`product/${id}`)
+            return res.data;
+        }
+        return [];
     }
 
 }
