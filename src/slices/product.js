@@ -35,6 +35,13 @@ export const editProduct = createAsyncThunk(
         return {p: product, i: index}
     }
 )
+export const deleteProduct = createAsyncThunk(
+    'deleteProduct',
+    async (id, index) => {
+        productApi.delete(id)
+        return index;
+    }
+)
 const productSlice = createSlice({
     name: "product",
     initialState: {data: []},
@@ -57,6 +64,9 @@ const productSlice = createSlice({
             let newState = [...state.data]
             newState[action.payload.p] = {...action.payload.p}
             state.data = [...newState]
+        },
+        [deleteProduct.fulfilled]: (state, action) => {
+            state.data.splice(action.payload, 1);
         }  
     }
 })

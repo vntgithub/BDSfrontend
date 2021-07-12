@@ -20,6 +20,7 @@ import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 import { editProduct } from '../slices/product';
 import { DataUsage, NaturePeople } from '@material-ui/icons';
+import productApi from '../apis/product.api';
 
 function Copyright() {
   return (
@@ -165,7 +166,7 @@ export default function EditProductForm(props) {
       arrProduct[index] = np
       setProducts(arrProduct)
       setDone(true)
-      //dispatch(editProduct(np, index))
+      productApi.edit(np)
 
     }else{
       setErr(true)

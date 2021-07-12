@@ -84,6 +84,8 @@ const MyProductPage = () => {
                 {
                     products.map((item, index) => 
                     <Product
+                        products={products}
+                        setProducts={setProducts}
                         index={index} 
                         openEdit={openEdit} 
                         key={index} 

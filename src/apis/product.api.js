@@ -29,6 +29,9 @@ const productApi = {
     edit: async (product) => {
         AxiosClient.put("product", product)
         console.log(product)
+    },
+    delete: async (id) => {
+        AxiosClient.delete(`product/${id}`)
     }
 
 }
