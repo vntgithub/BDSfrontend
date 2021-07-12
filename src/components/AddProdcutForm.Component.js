@@ -154,11 +154,9 @@ export default function AddProductForm(props) {
     
     if(check){
       setErr(false)
+      
       //upload image to cloudinary
       let arrUrl = []
-      
-      //Add method
-      
       for(let i = 0; i < files.length; i++){
         const imageData  = new FormData();
         imageData.append('file', files[i]);

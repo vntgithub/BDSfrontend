@@ -17,9 +17,9 @@ import ListCategory from './ListCategory.Component';
 import { useDispatch, useSelector } from 'react-redux';
 import ImageButton from "../components/ImageUpload.Component"
 import axios from 'axios';
-import { unwrapResult } from '@reduxjs/toolkit';
 import Alert from '@material-ui/lab/Alert';
 import { editProduct } from '../slices/product';
+import { DataUsage, NaturePeople } from '@material-ui/icons';
 
 function Copyright() {
   return (
@@ -59,18 +59,28 @@ const useStyles = makeStyles((theme) => ({
   miniInput: {
       width: 150,
       margin: theme.spacing(1)
+  },
+  numImage: {
+    margin: theme.spacing(1),
+    fontWeight: 'bold',
+    color: '',
+    fontSize: '1.3rem'
   }
 }));
 
 export default function EditProductForm(props) {
-  const { products, setProducts, p, index, close } = props
   const userId = useSelector(state => state.user.data.id)
+  const { products, setProducts, p, index, close } = props
   const dispatch = useDispatch()
   const classes = useStyles();
   const [files, setFiles] = useState([])
   const [err, setErr] = useState(false)
   const [done, setDone] = useState(false)
-  const [data, setData] = useState({...p})
+  const [nImage, setNImage] = useState(0)
+  const [data, setData] = useState({...p, user: {id: userId}})
+  const [checkChangeImage, setCheckChangeImage] = useState(false)
+  
+
   
   const add = async () => {
     let check = true;
@@ -117,23 +127,14 @@ export default function EditProductForm(props) {
     if(data.category === -1)
       check &= false;
 ;
-    if(files.length === 0)
+    if(files.length === 0 && data.images.lenght === 0)
       check &= false
     
     
     
     if(check){
-      //upload image to cloudinary
-      let arrUrl = []
-      for(let i = 0; i < files.length; i++){
-        const imageData  = new FormData();
-        imageData.append('file', files[i]);
-        imageData.append('upload_preset', 'product-bds');
-        await axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
-        .then(res => arrUrl.push({url: res.data.secure_url}))
-      }
-
-      const np = {...data, 
+      setErr(false)
+      let np = {...data, 
         title: title,
         price: price,
         descreption: descreption,
@@ -143,14 +144,28 @@ export default function EditProductForm(props) {
         numberOfWC: numberOfWC,
         funiture: funiture,
         legalInfor: legalInfor,
-        images: arrUrl
       }
 
-      const newProduct = unwrapResult(await dispatch(editProduct(np)))
+      //upload image to cloudinary
+      
+      // let arrUrl = [];
+      // if(checkChangeImage){
+      //   for(let i = 0; i < files.length; i++){
+      //     const imageData  = new FormData();
+      //     imageData.append('file', files[i]);
+      //     imageData.append('upload_preset', 'product-bds');
+      //     axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
+      //     .then(res => arrUrl.push({url: res.data.secure_url}))
+      //   }
+      // }
+      // console.log(arrUrl)
 
-      setProducts([...products, newProduct])
-
+      
+      const arrProduct = [...products]
+      arrProduct[index] = np
+      setProducts(arrProduct)
       setDone(true)
+      //dispatch(editProduct(np, index))
 
     }else{
       setErr(true)
@@ -159,7 +174,11 @@ export default function EditProductForm(props) {
   }
   
 
-  const getImage = (e) => setFiles(e.target.files)
+  const getImage = (e) => {
+    setFiles(e.target.files)
+    setNImage(e.target.files.length)
+    setCheckChangeImage(true)
+  }
 
   useEffect(() => {
     document.getElementById('title').value = p.title;
@@ -171,6 +190,7 @@ export default function EditProductForm(props) {
     document.getElementById('frontispiece').value = p.frontispiece;
     document.getElementById('funiture').value = p.funiture
     document.getElementById('legalInfor').value = p.legalInfor
+    setNImage(p.images.length)
   }, [])
 
   return (
@@ -306,6 +326,9 @@ export default function EditProductForm(props) {
             <Grid item xs={12} sm={12}>
               <ImageButton getImage={getImage} />
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <p className={classes.numImage}>Image: {nImage}  </p>
+            </Grid>
           </Grid>
 
           <Grid item sm={12} className={classes.centerContent}>
@@ -315,7 +338,7 @@ export default function EditProductForm(props) {
               color="primary"
               className={classes.submit}
             >
-              Add product
+              Edit product
             </Button>
             <Button
               onClick={close}
@@ -332,7 +355,7 @@ export default function EditProductForm(props) {
           </Grid>}
           {done &&
           <Grid item xs={12} sm={12}>
-          <Alert severity="success">Add prodcut successful</Alert>
+          <Alert severity="success">Edit prodcut successful</Alert>
           </Grid>}
         </form>
       </div>

@@ -56,6 +56,7 @@ const productSlice = createSlice({
         [editProduct.fulfilled]: (state, action) => {
             let newState = [...state.data]
             newState[action.payload.p] = {...action.payload.p}
+            state.data = [...newState]
         }  
     }
 })

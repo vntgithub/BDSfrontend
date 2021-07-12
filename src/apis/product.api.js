@@ -27,9 +27,8 @@ const productApi = {
         return res.data
     },
     edit: async (product) => {
+        AxiosClient.put("product", product)
         console.log(product)
-        // const res = await AxiosClient.put("product", product)
-        // return res.data
     }
 
 }
