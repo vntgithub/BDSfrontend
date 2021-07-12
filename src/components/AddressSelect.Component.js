@@ -103,6 +103,16 @@ export default function SimpleSelect(props) {
     }
     setStreetId(event.target.value)
   }
+
+  useEffect(() => {
+    if(props.hasOwnProperty('defaultValue')){
+      const {defaultValue} = props;
+      setPCId(defaultValue.provinceCity.id)
+      setDistrictId(defaultValue.district.id)
+      setWardId(defaultValue.ward.id)
+      setStreetId(defaultValue.street.id)
+    }
+  }, [])
   
 
   return (

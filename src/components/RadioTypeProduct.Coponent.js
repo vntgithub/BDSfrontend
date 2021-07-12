@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -12,6 +12,12 @@ export default function RadioTypeProduct(props) {
     setData({...data, lease: !value})
     setValue(!value)
   }
+
+  useEffect(() => {
+    if(props.hasOwnProperty('defaultValue')){
+      setValue(props.defaultValue)
+    }
+  })
 
   return (
     <FormControl component="fieldset">

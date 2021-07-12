@@ -34,6 +34,10 @@ export default function ListCategory(props) {
   }
   useEffect(() => {
     fetchCategory()
+    if(props.hasOwnProperty('defaultValue')){
+      const {defaultValue} = props;
+      setValue(defaultValue.id)
+    }
   }, [])
 
   

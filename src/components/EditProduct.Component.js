@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import ImageButton from "../components/ImageUpload.Component"
 import axios from 'axios';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Alert from '@material-ui/lab/Alert';
-import { addProduct } from '../slices/product';
+import { editProduct } from '../slices/product';
 
 function Copyright() {
   return (
@@ -59,17 +59,11 @@ const useStyles = makeStyles((theme) => ({
   miniInput: {
       width: 150,
       margin: theme.spacing(1)
-  },
-  numImage: {
-    margin: theme.spacing(1),
-    fontWeight: 'bold',
-    color: '',
-    fontSize: '1.3rem'
   }
 }));
 
-export default function AddProductForm(props) {
-  const { products, setProducts, isEdit, index, p } = props
+export default function EditProductForm(props) {
+  const { products, setProducts, p, index, close } = props
   const userId = useSelector(state => state.user.data.id)
   const dispatch = useDispatch()
   const classes = useStyles();
@@ -77,28 +71,7 @@ export default function AddProductForm(props) {
   const [files, setFiles] = useState([])
   const [err, setErr] = useState(false)
   const [done, setDone] = useState(false)
-  const [nImage, setNImage] = useState(0)
-  const [data, setData] = useState({
-    title: "",
-    lease: true,
-    price: -1,
-    descreption: "",
-    phoneNumber: "",
-    address: {
-      provinceCity: {id: -1},
-      district: {id: -1},
-      ward:{id: -1},
-      street: {id: -1}
-    },
-    category:{id: -1},
-    images: [],
-    user: {id: userId},
-    frontispiece: -1,
-    numberOfFloors: -1,
-    numberOfWC: -1,
-    funiture: "",
-    legalInfor: ""
-})
+  const [data, setData] = useState({...p})
   
   const add = async () => {
     let check = true;
@@ -174,16 +147,11 @@ export default function AddProductForm(props) {
         images: arrUrl
       }
 
-      if(!isEdit){
-        const newProduct = unwrapResult(await dispatch(addProduct(np)))
-        setProducts([...products, newProduct])
-        setDone(true)
-      }else{
-        const newArrProduct = [...products]
-        newArrProduct[index] = np;
-        setProducts(newArrProduct)
-        // dispatch()
-      }
+      const newProduct = unwrapResult(await dispatch(editProduct(np)))
+
+      setProducts([...products, newProduct])
+
+      setDone(true)
 
     }else{
       setErr(true)
@@ -192,27 +160,18 @@ export default function AddProductForm(props) {
   }
   
 
-  const getImage = (e) => {
-    setFiles(e.target.files)
-    setNImage(e.target.files.length)
-  }
-
-  const getTilteMethod = () => isEdit ? "Edit product" : "Add product"
-
+  const getImage = (e) => setFiles(e.target.files)
 
   useEffect(() => {
-    if(isEdit){
-      document.getElementById('title').value = p.title
-      document.getElementById('price').value = p.price
-      document.getElementById('descreption').value = p.descreption
-      document.getElementById('phoneNumbers').value = p.phoneNumber
-      document.getElementById('numfloors').value = p.numberOfFloors
-      document.getElementById('numWC').value = p.numberOfWC
-      document.getElementById('frontispiece').value = p.frontispiece
-      document.getElementById('funiture').value = p.funiture
-      document.getElementById('legalInfor').value = p.legalInfor
-      setNImage(p.images.length)
-    }
+    document.getElementById('title').value = p.title;
+    document.getElementById('price').value = p.price;
+    document.getElementById('descreption').value = p.descreption;
+    document.getElementById('phoneNumbers').value = p.phoneNumber;
+    document.getElementById('numfloors').value = p.numberOfFloors;
+    document.getElementById('numWC').value = p.numberOfWC;
+    document.getElementById('frontispiece').value = p.frontispiece;
+    document.getElementById('funiture').value = p.funiture
+    document.getElementById('legalInfor').value = p.legalInfor
   }, [])
 
   return (
@@ -223,7 +182,7 @@ export default function AddProductForm(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {getTilteMethod()}
+          Edit product
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -278,13 +237,13 @@ export default function AddProductForm(props) {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <RadioTypeProduct defaultValue={p.lease} data={data} setData={setData} />
+              <RadioTypeProduct data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <AddressSelect defaultValue={p.address} data={data} setData={setData} />
+              <AddressSelect data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ListCategory defaultValue={p.category} data={data} setData={setData} />
+              <ListCategory data={data} setData={setData} />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -348,9 +307,6 @@ export default function AddProductForm(props) {
             <Grid item xs={12} sm={12}>
               <ImageButton getImage={getImage} />
             </Grid>
-            <Grid item xs={12} sm={12}>
-              <p className={classes.numImage}>Image: {nImage}  </p>
-            </Grid>
           </Grid>
 
           <Grid item sm={12} className={classes.centerContent}>
@@ -360,10 +316,10 @@ export default function AddProductForm(props) {
               color="primary"
               className={classes.submit}
             >
-              {getTilteMethod()}
+              Add product
             </Button>
             <Button
-              onClick={open}
+              onClick={close}
               variant="contained"
               className={classes.submit}
             >

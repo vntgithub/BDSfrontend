@@ -58,6 +58,8 @@ export default function MediaControlCard(props) {
     address
   } = props.data;
 
+  const { openEdit, index } = props
+
   const getPrice = (p) => {
     const rs = p/1000000000;
     if(rs >= 1)
@@ -94,7 +96,7 @@ export default function MediaControlCard(props) {
         <div className={classes.ofUser}>
           <div className={classes.containerIcon} >
             <div className={classes.icon}>
-              <Edit />
+              <Edit onClick={openEdit(props.data, index)} />
             </div>
             <div className={classes.icon}>
               <Delete />

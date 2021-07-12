@@ -26,6 +26,9 @@ const MyProductPage = () => {
     const [user, setUser] = useState({})
     const [products, setProducts] = useState([])
     const [openForm, setOpenForm] = useState(false)
+    const [isEdit, setIsEdit] = useState(false);
+    const [indexP, setIndexP] = useState(-1)
+    const [pWantEdit, setPWantEdit] = useState({})
 
     const fetchProduct = async (userId) => {
         const data = unwrapResult(await dispatch(fetchProductByUserId(userId)))
@@ -52,7 +55,19 @@ const MyProductPage = () => {
         }
             
     }, [user])
-    const open = () => setOpenForm(!openForm)
+    const open = () => {
+        setIsEdit(false)
+        setOpenForm(!openForm)
+    }
+    
+    const openEdit = (p, index) => {
+        return () => {
+            setIndexP(index)
+            setPWantEdit(p)
+            setIsEdit(true)
+            setOpenForm(!openForm)
+        }
+    }
     return (
         <div>
             <MenuBar avt={userData.avt} />
@@ -63,10 +78,23 @@ const MyProductPage = () => {
                         Add product
                     </Button>
                 {
-                    products.map((item, index) => <Product key={index} data={item} />)
+                    products.map((item, index) => 
+                    <Product
+                        index={index} 
+                        openEdit={openEdit} 
+                        key={index} 
+                        data={item} 
+                    />)
                 }
                 </div>}
-                {openForm && <AddProductForm products={products} setProducts={setProducts} open={open} />}
+                {openForm && 
+                <AddProductForm 
+                    isEdit={isEdit} 
+                    p={pWantEdit}
+                    index={indexP}
+                    products={products} 
+                    setProducts={setProducts} 
+                    open={open} />}
             </div>
         </div>
     )
