@@ -22,7 +22,12 @@ export const fetchProductByUserId = createAsyncThunk(
         return await productApi.getProductByUserId(userId)
     }
 )
-
+export const addProduct = createAsyncThunk(
+    'addProduct',
+    async (product) => {
+        return await productApi.add(product)
+    }
+)
 const productSlice = createSlice({
     name: "product",
     initialState: {data: []},
@@ -36,6 +41,10 @@ const productSlice = createSlice({
         },
         [fetchProductByUserId.fulfilled]: (state, action) => {
             state.data = action.payload;
+        },
+        [addProduct.fulfilled]: (state, action) => {
+            const newData = [...state.data, action.payload]
+            state.data = newData;
         }  
     }
 })

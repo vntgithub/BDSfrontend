@@ -14,8 +14,12 @@ import Container from '@material-ui/core/Container';
 import RadioTypeProduct from '../components/RadioTypeProduct.Coponent';
 import AddressSelect from '../components/AddressSelect.Component';
 import ListCategory from './ListCategory.Component';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ImageButton from "../components/ImageUpload.Component"
+import axios from 'axios';
+import { unwrapResult } from '@reduxjs/toolkit';
+import Alert from '@material-ui/lab/Alert';
+import { addProduct } from '../slices/product';
 
 function Copyright() {
   return (
@@ -59,9 +63,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddProductForm(props) {
+  const { products, setProducts } = props
   const userId = useSelector(state => state.user.data.id)
+  const dispatch = useDispatch()
   const classes = useStyles();
   const { open } = props;
+  const [files, setFiles] = useState([])
+  const [err, setErr] = useState(false)
+  const [done, setDone] = useState(false)
   const [data, setData] = useState({
     title: "",
     lease: true,
@@ -84,7 +93,7 @@ export default function AddProductForm(props) {
     legalInfor: ""
 })
   
-  const validData = () => {
+  const add = async () => {
     let check = true;
     const title = document.getElementById('title').value
     const price = document.getElementById('price').value
@@ -125,10 +134,28 @@ export default function AddProductForm(props) {
 
     if(data.address.street.id === -1)
       check &= false;
+
+    if(data.category === -1)
+      check &= false;
+;
+    if(files.length === 0)
+      check &= false
+    
+    
     
     if(check){
-      setData({...data, 
-        title: "",
+      //upload image to cloudinary
+      let arrUrl = []
+      for(let i = 0; i < files.length; i++){
+        const imageData  = new FormData();
+        imageData.append('file', files[i]);
+        imageData.append('upload_preset', 'product-bds');
+        await axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
+        .then(res => arrUrl.push({url: res.data.secure_url}))
+      }
+
+      const np = {...data, 
+        title: title,
         price: price,
         descreption: descreption,
         phoneNumber: phoneNumbers,
@@ -136,15 +163,24 @@ export default function AddProductForm(props) {
         numberOfFloors: numberOfFloors,
         numberOfWC: numberOfWC,
         funiture: funiture,
-        legalInfor: legalInfor
-      })
+        legalInfor: legalInfor,
+        images: arrUrl
+      }
+
+      const newProduct = unwrapResult(await dispatch(addProduct(np)))
+
+      setProducts([...products, newProduct])
+
+      setDone(true)
+
+    }else{
+      setErr(true)
     }
 
-    return check;
   }
-  const addProduct = () => {
-    console.log(validData())
-  }
+  
+
+  const getImage = (e) => setFiles(e.target.files)
 
 
   return (
@@ -278,13 +314,13 @@ export default function AddProductForm(props) {
 
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ImageButton />
+              <ImageButton getImage={getImage} />
             </Grid>
           </Grid>
 
           <Grid sm={12} className={classes.centerContent}>
             <Button
-              onClick={addProduct}
+              onClick={add}
               variant="contained"
               color="primary"
               className={classes.submit}
@@ -300,6 +336,14 @@ export default function AddProductForm(props) {
             </Button>
           </Grid>
           
+          {err&&
+          <Grid item xs={12} sm={12}>
+            <Alert severity="error">Some data fields are empty</Alert>
+          </Grid>}
+          {done &&
+          <Grid item xs={12} sm={12}>
+          <Alert severity="success">Add prodcut successful</Alert>
+          </Grid>}
         </form>
       </div>
       <Box mt={5}>

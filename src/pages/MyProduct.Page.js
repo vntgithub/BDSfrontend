@@ -66,7 +66,7 @@ const MyProductPage = () => {
                     products.map((item, index) => <Product key={index} data={item} />)
                 }
                 </div>}
-                {openForm && <AddProductForm open={open} />}
+                {openForm && <AddProductForm products={products} setProducts={setProducts} open={open} />}
             </div>
         </div>
     )

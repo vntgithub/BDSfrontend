@@ -15,12 +15,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function UploadButtons() {
+export default function UploadButtons(props) {
   const classes = useStyles();
+  const { getImage } = props;
 
   return (
     <div className={classes.root}>
       <input
+        onChange={getImage}
         accept="image/*"
         className={classes.input}
         id="contained-button-file"

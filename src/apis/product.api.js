@@ -21,6 +21,10 @@ const productApi = {
             return res.data;
         }
         return [];
+    },
+    add: async (product) => {
+        const res = await AxiosClient.post("product", product)
+        return res.data
     }
 
 }
