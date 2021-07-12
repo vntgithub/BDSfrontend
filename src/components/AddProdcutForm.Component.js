@@ -19,7 +19,7 @@ import ImageButton from "../components/ImageUpload.Component"
 import axios from 'axios';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Alert from '@material-ui/lab/Alert';
-import { addProduct } from '../slices/product';
+import { addProduct, editProduct } from '../slices/product';
 
 function Copyright() {
   return (
@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddProductForm(props) {
-  const { products, setProducts, isEdit, index, p } = props
+  const { products, setProducts} = props
   const userId = useSelector(state => state.user.data.id)
   const dispatch = useDispatch()
   const classes = useStyles();
@@ -112,6 +112,7 @@ export default function AddProductForm(props) {
     const funiture = document.getElementById('funiture').value
     const legalInfor = document.getElementById('legalInfor').value
 
+
     if(title === '' || title === null)
       check &= false;
 
@@ -145,14 +146,19 @@ export default function AddProductForm(props) {
     if(data.category === -1)
       check &= false;
 ;
-    if(files.length === 0)
+    if(files.length === 0 && data.images.length === 0)
       check &= false
     
     
     
+    
     if(check){
+      setErr(false)
       //upload image to cloudinary
       let arrUrl = []
+      
+      //Add method
+      
       for(let i = 0; i < files.length; i++){
         const imageData  = new FormData();
         imageData.append('file', files[i]);
@@ -160,8 +166,9 @@ export default function AddProductForm(props) {
         await axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
         .then(res => arrUrl.push({url: res.data.secure_url}))
       }
-
-      const np = {...data, 
+      
+      
+      let np = {...data, 
         title: title,
         price: price,
         descreption: descreption,
@@ -171,19 +178,12 @@ export default function AddProductForm(props) {
         numberOfWC: numberOfWC,
         funiture: funiture,
         legalInfor: legalInfor,
-        images: arrUrl
+        images: [...arrUrl]
       }
 
-      if(!isEdit){
-        const newProduct = unwrapResult(await dispatch(addProduct(np)))
-        setProducts([...products, newProduct])
-        setDone(true)
-      }else{
-        const newArrProduct = [...products]
-        newArrProduct[index] = np;
-        setProducts(newArrProduct)
-        // dispatch()
-      }
+      const newProduct = unwrapResult(await dispatch(addProduct(np)))
+      setProducts([...products, newProduct])
+      setDone(true)
 
     }else{
       setErr(true)
@@ -197,23 +197,7 @@ export default function AddProductForm(props) {
     setNImage(e.target.files.length)
   }
 
-  const getTilteMethod = () => isEdit ? "Edit product" : "Add product"
 
-
-  useEffect(() => {
-    if(isEdit){
-      document.getElementById('title').value = p.title
-      document.getElementById('price').value = p.price
-      document.getElementById('descreption').value = p.descreption
-      document.getElementById('phoneNumbers').value = p.phoneNumber
-      document.getElementById('numfloors').value = p.numberOfFloors
-      document.getElementById('numWC').value = p.numberOfWC
-      document.getElementById('frontispiece').value = p.frontispiece
-      document.getElementById('funiture').value = p.funiture
-      document.getElementById('legalInfor').value = p.legalInfor
-      setNImage(p.images.length)
-    }
-  }, [])
 
   return (
     <Container component="main" maxWidth="sm">
@@ -223,7 +207,7 @@ export default function AddProductForm(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          {getTilteMethod()}
+          Add product
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -278,13 +262,13 @@ export default function AddProductForm(props) {
               />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <RadioTypeProduct defaultValue={p.lease} data={data} setData={setData} />
+              <RadioTypeProduct data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <AddressSelect defaultValue={p.address} data={data} setData={setData} />
+              <AddressSelect  data={data} setData={setData} />
             </Grid>
             <Grid item xs={12} sm={12}>
-              <ListCategory defaultValue={p.category} data={data} setData={setData} />
+              <ListCategory data={data} setData={setData} />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -360,7 +344,7 @@ export default function AddProductForm(props) {
               color="primary"
               className={classes.submit}
             >
-              {getTilteMethod()}
+              Add product
             </Button>
             <Button
               onClick={open}

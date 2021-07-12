@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import ImageButton from "../components/ImageUpload.Component"
 import axios from 'axios';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Alert from '@material-ui/lab/Alert';
-import { editProduct } from '../slices/product';
+import { addProduct, editProduct } from '../slices/product';
 
 function Copyright() {
   return (
@@ -59,18 +59,47 @@ const useStyles = makeStyles((theme) => ({
   miniInput: {
       width: 150,
       margin: theme.spacing(1)
+  },
+  numImage: {
+    margin: theme.spacing(1),
+    fontWeight: 'bold',
+    color: '',
+    fontSize: '1.3rem'
   }
 }));
 
-export default function EditProductForm(props) {
-  const { products, setProducts, p, index, close } = props
+export default function AddProductForm(props) {
+  const { products, setProducts, isEdit, index, p } = props
   const userId = useSelector(state => state.user.data.id)
   const dispatch = useDispatch()
   const classes = useStyles();
+  const { open } = props;
   const [files, setFiles] = useState([])
   const [err, setErr] = useState(false)
   const [done, setDone] = useState(false)
-  const [data, setData] = useState({...p})
+  const [nImage, setNImage] = useState(0)
+  const [checkChangeImageDataWhenEidt, setCheckChangeImageDataWhenEidt] = useState(false)
+  const [data, setData] = useState({
+    title: "",
+    lease: true,
+    price: -1,
+    descreption: "",
+    phoneNumber: "",
+    address: {
+      provinceCity: {id: -1},
+      district: {id: -1},
+      ward:{id: -1},
+      street: {id: -1}
+    },
+    category:{id: -1},
+    images: [],
+    user: {id: userId},
+    frontispiece: -1,
+    numberOfFloors: -1,
+    numberOfWC: -1,
+    funiture: "",
+    legalInfor: ""
+})
   
   const add = async () => {
     let check = true;
@@ -83,6 +112,10 @@ export default function EditProductForm(props) {
     const frontispiece = document.getElementById('frontispiece').value
     const funiture = document.getElementById('funiture').value
     const legalInfor = document.getElementById('legalInfor').value
+
+
+    
+
 
     if(title === '' || title === null)
       check &= false;
@@ -117,23 +150,17 @@ export default function EditProductForm(props) {
     if(data.category === -1)
       check &= false;
 ;
-    if(files.length === 0)
+    if(files.length === 0 && data.images.length === 0)
       check &= false
     
     
     
+    
     if(check){
+      setErr(false)
       //upload image to cloudinary
       let arrUrl = []
-      for(let i = 0; i < files.length; i++){
-        const imageData  = new FormData();
-        imageData.append('file', files[i]);
-        imageData.append('upload_preset', 'product-bds');
-        await axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
-        .then(res => arrUrl.push({url: res.data.secure_url}))
-      }
-
-      const np = {...data, 
+      let np = {...data, 
         title: title,
         price: price,
         descreption: descreption,
@@ -143,34 +170,62 @@ export default function EditProductForm(props) {
         numberOfWC: numberOfWC,
         funiture: funiture,
         legalInfor: legalInfor,
-        images: arrUrl
       }
-
-      const newProduct = unwrapResult(await dispatch(editProduct(np)))
-
-      setProducts([...products, newProduct])
-
-      setDone(true)
+      
+      //Edit product, when change image
+      if(isEdit && checkChangeImageDataWhenEidt){
+        for(let i = 0; i < files.length; i++){
+          const imageData  = new FormData();
+          imageData.append('file', files[i]);
+          imageData.append('upload_preset', 'product-bds');
+          await axios.post("https://api.cloudinary.com/v1_1/vntrieu/image/upload", imageData)
+          .then(res => arrUrl.push({url: res.data.secure_url}))
+        }
+        np.images = [...arrUrl]
+      }
+      
+      if(!isEdit){
+        const newProduct = unwrapResult(await dispatch(addProduct(np)))
+        setProducts([...products, newProduct])
+        setDone(true)
+      }else{
+        const newArrProduct = [...products]
+        newArrProduct[index] = {...np};
+        setProducts(newArrProduct)
+        dispatch(editProduct(np, index))
+        setDone(true)
+      }
 
     }else{
       setErr(true)
     }
-
   }
   
 
-  const getImage = (e) => setFiles(e.target.files)
+  const getImage = (e) => {
+    if(isEdit)
+      setCheckChangeImageDataWhenEidt(true)
+    setFiles(e.target.files)
+    setNImage(e.target.files.length)
+  }
+
+  const getTilteMethod = () => isEdit ? "Edit product" : "Add product"
+
 
   useEffect(() => {
-    document.getElementById('title').value = p.title;
-    document.getElementById('price').value = p.price;
-    document.getElementById('descreption').value = p.descreption;
-    document.getElementById('phoneNumbers').value = p.phoneNumber;
-    document.getElementById('numfloors').value = p.numberOfFloors;
-    document.getElementById('numWC').value = p.numberOfWC;
-    document.getElementById('frontispiece').value = p.frontispiece;
-    document.getElementById('funiture').value = p.funiture
-    document.getElementById('legalInfor').value = p.legalInfor
+    if(isEdit){
+      setData({...p});
+      document.getElementById('title').value = p.title
+      document.getElementById('price').value = p.price
+      document.getElementById('descreption').value = p.descreption
+      document.getElementById('phoneNumbers').value = p.phoneNumber
+      document.getElementById('numfloors').value = p.numberOfFloors
+      document.getElementById('numWC').value = p.numberOfWC
+      document.getElementById('frontispiece').value = p.frontispiece
+      document.getElementById('funiture').value = p.funiture
+      document.getElementById('legalInfor').value = p.legalInfor
+      setNImage(p.images.length)
+    }
   }, [])
 
   return (
@@ -181,7 +236,7 @@ export default function EditProductForm(props) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Edit product
+          {getTilteMethod()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -306,6 +361,9 @@ export default function EditProductForm(props) {
             <Grid item xs={12} sm={12}>
               <ImageButton getImage={getImage} />
             </Grid>
+            <Grid item xs={12} sm={12}>
+              <p className={classes.numImage}>Image: {nImage}  </p>
+            </Grid>
           </Grid>
 
           <Grid item sm={12} className={classes.centerContent}>
@@ -315,10 +373,10 @@ export default function EditProductForm(props) {
               color="primary"
               className={classes.submit}
             >
-              Add product
+              {getTilteMethod()}
             </Button>
             <Button
-              onClick={close}
+              onClick={open}
               variant="contained"
               className={classes.submit}
             >

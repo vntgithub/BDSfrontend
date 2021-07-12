@@ -28,6 +28,13 @@ export const addProduct = createAsyncThunk(
         return await productApi.add(product)
     }
 )
+export const editProduct = createAsyncThunk(
+    'editProduct',
+    async (product, index) => {
+        productApi.edit(product)
+        return {p: product, i: index}
+    }
+)
 const productSlice = createSlice({
     name: "product",
     initialState: {data: []},
@@ -45,6 +52,10 @@ const productSlice = createSlice({
         [addProduct.fulfilled]: (state, action) => {
             const newData = [...state.data, action.payload]
             state.data = newData;
+        },
+        [editProduct.fulfilled]: (state, action) => {
+            let newState = [...state.data]
+            newState[action.payload.p] = {...action.payload.p}
         }  
     }
 })

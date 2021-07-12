@@ -10,6 +10,7 @@ import { useHistory } from "react-router";
 import {Button} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import AddProductForm from "../components/AddProdcutForm.Component";
+import EditProductForm from "../components/EditProduct.Component";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -26,9 +27,11 @@ const MyProductPage = () => {
     const [user, setUser] = useState({})
     const [products, setProducts] = useState([])
     const [openForm, setOpenForm] = useState(false)
+    const [openEditForm, setOpenEditForm] = useState(false)
     const [isEdit, setIsEdit] = useState(false);
     const [indexP, setIndexP] = useState(-1)
     const [pWantEdit, setPWantEdit] = useState({})
+
 
     const fetchProduct = async (userId) => {
         const data = unwrapResult(await dispatch(fetchProductByUserId(userId)))
@@ -59,20 +62,21 @@ const MyProductPage = () => {
         setIsEdit(false)
         setOpenForm(!openForm)
     }
+
+    const close = () => setOpenEditForm(false)
     
     const openEdit = (p, index) => {
         return () => {
             setIndexP(index)
             setPWantEdit(p)
-            setIsEdit(true)
-            setOpenForm(!openForm)
+            setOpenEditForm(true)
         }
     }
     return (
         <div>
             <MenuBar avt={userData.avt} />
             <div className="containerProduct">
-                {!openForm && 
+                {!openForm && !openEditForm &&
                 <div>
                     <Button onClick={open} className={classes.button} variant="outlined" >
                         Add product
@@ -95,6 +99,13 @@ const MyProductPage = () => {
                     products={products} 
                     setProducts={setProducts} 
                     open={open} />}
+                {openEditForm && 
+                <EditProductForm 
+                    p={pWantEdit}
+                    index={indexP}
+                    products={products} 
+                    setProducts={setProducts} 
+                    close={close} />}
             </div>
         </div>
     )
