@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SimpleSelect(props) {
   const classes = useStyles();
-  const {setFilter, search, filter, openAddProductForm} = props;
+  const {setFilter, search, filter} = props;
 
   const [provinceCity, setProvinceCity] = useState([]);
   const [pCId, setPCId] = useState("");
