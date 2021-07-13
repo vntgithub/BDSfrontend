@@ -11,22 +11,28 @@ import { searchProduct } from "../slices/product";
 import MenuBar from "../components/MenuBar.Component"
 import { signInByToken } from "../slices/user";
 import AxiosClient from "../apis/AxiosClient";
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 
-// import 
+const useStyles = makeStyles((theme) => ({
+    sort: {
+      margin: theme.spacing(2),
+    }
+  }));
 
 const HomePage = () => {
+    const classes = useStyles();
     const dispatch = useDispatch();
     const [products, setProducts] = useState([]);
     const [user, setUser] = useState({})
     const [currentPage, setCurrentPage] = useState(0);
     const [numberOfPage, setNumberOfPage] = useState(0);
+    const [sortMethod, setSortMethod] = useState(true)
     const [filter, setFilter] = useState({
         searchString: null, priceRange: null, provinceCityId: null,
         districtId: null, wardId: null, streetId: null
     })
-    const [openAddProduct, setOpenAddProduct] = useState(false)
 
-    const openAddProductForm = () => setOpenAddProduct(!openAddProduct);
 
     const fetch = async (p) => {
         const rsAction = await dispatch(fetchProduct(p));
@@ -74,26 +80,55 @@ const HomePage = () => {
     }, [currentPage])
     
     const handleChangePage = (e, page) => setCurrentPage(page-1)
+
+    const sortProducts = () => {
+        let cloneData = [...products]
+        if(sortMethod){
+            // Sort descending
+            for(let i = 0; i < cloneData.length - 1; i++) {
+                for(let j = i+1; j < cloneData.length; j++) {
+                    if(cloneData[i].price < cloneData[j].price) {
+                        let tmp = cloneData[i]
+                        cloneData[i] = cloneData[j]
+                        cloneData[j] = tmp
+                    }
+                }
+            }
+        }else{
+            //Sort ascending
+            for(let i = 0; i < cloneData.length - 1; i++) {
+                for(let j = i+1; j < cloneData.length; j++) {
+                    if(cloneData[i].price > cloneData[j].price) {
+                        let tmp = cloneData[i]
+                        cloneData[i] = cloneData[j]
+                        cloneData[j] = tmp
+                    }
+                }
+            }
+        }
+        setSortMethod(!sortMethod)
+        setProducts(cloneData)
+    }
     return (
         <div>
             <MenuBar avt={user.avt || ""} />
             <Container>
-                
                 <div className="listProduct">
                     <div>
                         <FilterSearch 
                         filter={filter} 
                         setFilter={setFilter}
-                        openAddProductForm={openAddProductForm}
                         search={search} />  
                     </div>
-                   {!openAddProduct && 
                     <div>
+                        <div className={classes.sort}>
+                            <Button onClick={sortProducts} variant="outlined">Sort by price</Button>
+                        </div>
                         {products.map((item, index) => <Product key={index} data={item} />)}
                         <Pagination 
                         onChange={handleChangePage} 
                         count={numberOfPage} />
-                   </div>}
+                   </div>
                 </div>
                 
             </Container>
