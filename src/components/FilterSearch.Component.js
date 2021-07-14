@@ -108,22 +108,55 @@ export default function SimpleSelect(props) {
 
 
   const handleChangeCity = (event) => {
-    const newFilter = {...filter, provinceCityId: event.target.value}
+    const id = event.target.value;
+    let newFilter
+    if(id !== "")
+      newFilter = {...filter, provinceCityId: id}
+    else
+      newFilter = {
+        ...filter, 
+        provinceCityId: null,
+        districtId: null, wardId: null, streetId: null 
+      }
     setFilter(newFilter)
-    setPCId(event.target.value)
+    setPCId(id)
   }
   const handleChangeDistrict = (event) => {
-        const newFilter = {...filter, districtId: event.target.value}
-        setFilter(newFilter)
+    const id = event.target.value;
+    let newFilter
+    if(id !== "")
+      newFilter = {...filter, districtId: id}
+    else
+      newFilter = {
+        ...filter, 
+        districtId: null, wardId: null, streetId: null 
+      }
+    setFilter(newFilter)
       setDistrictId(event.target.value);
     }
   const handleChangeWard = (event) => {
-    const newFilter = {...filter, wardId: event.target.value}
+    const id = event.target.value;
+    let newFilter
+    if(id !== "")
+      newFilter = {...filter, wardId: id}
+    else
+      newFilter = {
+        ...filter, 
+        wardId: null, streetId: null 
+      }
     setFilter(newFilter)  
     setWardId(event.target.value)
   }
   const handleChangeStreet = (event) => {
-    const newFilter = {...filter, streetId: event.target.value}
+    const id = event.target.value;
+    let newFilter
+    if(id !== "")
+      newFilter = {...filter, streetId: id}
+    else
+      newFilter = {
+        ...filter, 
+       streetId: null 
+      }
     setFilter(newFilter) 
     setStreetId(event.target.value);
   }

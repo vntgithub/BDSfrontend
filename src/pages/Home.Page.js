@@ -13,6 +13,7 @@ import { signInByToken } from "../slices/user";
 import AxiosClient from "../apis/AxiosClient";
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
+import filterApi from "../apis/filte.api";
 
 const useStyles = makeStyles((theme) => ({
     sort: {
@@ -47,14 +48,22 @@ const HomePage = () => {
 
     const search = async () => {
         let url = "product/search?";
+        let filterObject = {
+            user:{id: user.id},
+            content: {
+
+            }
+        }
         let check = false;
         for(let key in filter){
             if(filter[key] !== null && filter[key] !== ""){
                 check = true;
                 url += `${key}=${filter[key]}&`;
+                filterObject.content[key] = filter[key];
             }
         }
         if(check){
+            filterApi.add(filterObject)
             const data = unwrapResult(await dispatch(searchProduct(url.substr(0, url.length-1))));
             setProducts(data);
         }

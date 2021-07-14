@@ -64,14 +64,20 @@ export default function SimpleSelect(props) {
 
   useEffect(() => {
     fetchDistrict(pCId);
+    setDistrictId("")
+    setWardId("")
+    setStreetId("")
   }, [pCId])
 
   useEffect(() => {
     fetchWard(districtId)
+    setWardId("")
+    setStreetId("")
   }, [districtId])
 
   useEffect(() => {
     fetchStreet(wardId)
+    setStreetId("")
   }, [wardId])
 
 

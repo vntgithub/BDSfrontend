@@ -6,7 +6,6 @@ const productApi = {
         return res.data;
     },
     search: async(url) => {
-        console.log(url)
         const res = await AxiosClient.get(url)
         return res.data
     },
