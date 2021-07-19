@@ -4,8 +4,6 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import { Edit, Delete} from '@material-ui/icons/'
-import productApi from '../apis/product.api';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,14 +35,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
     marginLeft: 'auto'
   },
-  icon: {
-    margin: theme.spacing(1),
-    cursor: 'pointer'
-  },
-  containerIcon: {
-    display: 'flex',
-    justifyContent: 'center'
-  }
+  
 }));
 
 export default function MediaControlCard(props) {
@@ -59,7 +50,6 @@ export default function MediaControlCard(props) {
     address
   } = props.data;
 
-  const { openEdit, index, products, setProducts } = props
 
 
   const getPrice = (p) => {
@@ -69,12 +59,7 @@ export default function MediaControlCard(props) {
     return Math.ceil(rs * 1000) + ' triệu';
   }
 
-  const del = () => {
-    let newData = [...products];
-    newData.splice(index, 1);
-    setProducts(newData)
-    productApi.delete(props.data.id)
-  }
+  
 
   return (
     <Card className={classes.root}>
@@ -101,17 +86,7 @@ export default function MediaControlCard(props) {
             Address: {address.addressString}
           </Typography>
         </CardContent>
-        {window.location.href.substring(window.location.origin.length) !== '/' &&
-        <div className={classes.ofUser}>
-          <div className={classes.containerIcon} >
-            <div className={classes.icon}>
-              <Edit onClick={openEdit(props.data, index)} />
-            </div>
-            <div className={classes.icon}>
-              <Delete onClick={del} />
-            </div>
-          </div>
-      </div>}
+        
       </div>
      
     </Card>

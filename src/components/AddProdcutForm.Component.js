@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import ImageButton from "../components/ImageUpload.Component"
 import axios from 'axios';
 import { unwrapResult } from '@reduxjs/toolkit';
 import Alert from '@material-ui/lab/Alert';
-import { addProduct, editProduct } from '../slices/product';
+import { addProduct } from '../slices/product';
 
 function Copyright() {
   return (
@@ -143,7 +143,7 @@ export default function AddProductForm(props) {
     if(data.address.street.id === -1)
       check &= false;
 
-    if(data.category === -1)
+    if(data.category.id === -1)
       check &= false;
 ;
     if(files.length === 0 && data.images.length === 0)
@@ -165,7 +165,7 @@ export default function AddProductForm(props) {
         .then(res => arrUrl.push({url: res.data.secure_url}))
       }
       
-      
+      //create new product
       let np = {...data, 
         title: title,
         price: price,

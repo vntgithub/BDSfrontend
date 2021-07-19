@@ -91,19 +91,25 @@ export default function SimpleSelect(props) {
   const handleChangeWard = (event) => setWardId(event.target.value);
   const handleChangeStreet = (event) => {
     if(props.hasOwnProperty('data')){
+      let indexStreet = street.findIndex(item => item.id === event.target.value);
+      let nameStreet = street[indexStreet].name;
       const { data, setData } = props;
       setData({...data, address: {
         provinceCity: {
           id: pCId,
+          name: document.getElementById('city').innerText
         },
         district: {
             id: districtId,
+            name: document.getElementById('district').innerText
         },
         ward:{
             id: wardId,
+            name:document.getElementById('ward').innerText
         },
         street: {
             id: event.target.value,
+            name: nameStreet
       }
       }})
     }
@@ -128,7 +134,7 @@ export default function SimpleSelect(props) {
         <InputLabel id="ProvinceCity">Province/City</InputLabel>
         <Select
           labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="city"
           value={pCId}
           onChange={handleChangeCity}
         >
@@ -145,7 +151,7 @@ export default function SimpleSelect(props) {
         <InputLabel id="District">District</InputLabel>
         <Select
           labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="district"
           value={districtId}
           onChange={handleChangeDistrict}
         >
@@ -161,7 +167,7 @@ export default function SimpleSelect(props) {
         <InputLabel id="Ward">Ward</InputLabel>
         <Select
           labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="ward"
           value={wardId}
           onChange={handleChangeWard}
         >
@@ -177,7 +183,7 @@ export default function SimpleSelect(props) {
         <InputLabel id="Street">Street</InputLabel>
         <Select
           labelId="demo-simple-select-label"
-          id="demo-simple-select"
+          id="street"
           value={streetId}
           onChange={handleChangeStreet}
         >

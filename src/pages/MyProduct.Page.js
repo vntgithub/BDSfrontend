@@ -11,6 +11,8 @@ import {Button} from "@material-ui/core"
 import { makeStyles } from '@material-ui/core/styles';
 import AddProductForm from "../components/AddProdcutForm.Component";
 import EditProductForm from "../components/EditProduct.Component";
+import TableProduct from "../components/TableProduct.component";
+
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -81,17 +83,12 @@ const MyProductPage = () => {
                     <Button onClick={open} className={classes.button} variant="outlined" >
                         Add product
                     </Button>
-                {
-                    products.map((item, index) => 
-                    <Product
-                        products={products}
-                        setProducts={setProducts}
-                        index={index} 
-                        openEdit={openEdit} 
-                        key={index} 
-                        data={item} 
-                    />)
-                }
+                    <TableProduct 
+                    products={products} 
+                    setProducts={setProducts} 
+                    openEdit={openEdit} 
+                    />
+                
                 </div>}
                 {openForm && 
                 <AddProductForm 
