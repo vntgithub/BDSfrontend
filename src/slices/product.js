@@ -18,8 +18,8 @@ export const searchProduct = createAsyncThunk(
 
 export const fetchProductByUserId = createAsyncThunk(
     "fetchProductByUserId",
-    async (userId) => {
-        return await productApi.getProductByUserId(userId)
+    async (userId, p) => {
+        return await productApi.getProductByUserId(userId, p)
     }
 )
 export const addProduct = createAsyncThunk(

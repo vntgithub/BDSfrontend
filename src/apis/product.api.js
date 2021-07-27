@@ -11,12 +11,16 @@ const productApi = {
     },
 
     getNumberOfPage: async () => {
-        const res = await AxiosClient.get("product/numberofpage");
+        const res = await AxiosClient.get(`product/numberofpage`);
         return res.data;
     },
-    getProductByUserId: async (id) => {
+    getNumberOfPageOfUser: async (id) => {
+        const res = await AxiosClient.get(`product/numberofpage/${id}`);
+        return res.data;
+    },
+    getProductByUserId: async (id, page) => {
         if(id){
-            const res = await AxiosClient.get(`product/${id}`)
+            const res = await AxiosClient.get(`product/${id}/${page}`)
             return res.data;
         }
         return [];
@@ -31,7 +35,12 @@ const productApi = {
     },
     delete: async (id) => {
         AxiosClient.delete(`product/${id}`)
-    }
+    },
+    getProductById: async (id) => {
+        const res = await AxiosClient.get(`product/detail/${id}`)
+        return res.data;
+    },
+    
 
 }
 

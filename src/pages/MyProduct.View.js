@@ -1,9 +1,7 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import MenuBar from "../components/MenuBar.Component"
-import { fetchProductByUserId } from "../slices/product";
-import Product from "../components/Product.Component"
+// import MenuBar from "../components/MenuBar.Component"
 import AxiosClient from "../apis/AxiosClient";
 import { signInByToken } from "../slices/user";
 import { useHistory } from "react-router";
@@ -12,6 +10,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddProductForm from "../components/AddProdcutForm.Component";
 import EditProductForm from "../components/EditProduct.Component";
 import TableProduct from "../components/TableProduct.component";
+import Pagination from '@material-ui/lab/Pagination';
+import productApi from "../apis/product.api";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,12 +33,14 @@ const MyProductPage = () => {
     const [isEdit, setIsEdit] = useState(false);
     const [indexP, setIndexP] = useState(-1)
     const [pWantEdit, setPWantEdit] = useState({})
+    const [currentPage, setCurrentPage] = useState(0);
+    const [numberOfPage, setNumberOfPage] = useState(0);
 
 
-    const fetchProduct = async (userId) => {
-        const data = unwrapResult(await dispatch(fetchProductByUserId(userId)))
-        setProducts(data);
-    }
+    const geNumPage = async () => setNumberOfPage(await productApi.getNumberOfPageOfUser(userData.id));
+    
+    const fetchProduct = async (userId, p) => setProducts(await productApi.getProductByUserId(userId, p));
+    
 
 
     const fetchUser = async () => {
@@ -52,14 +54,21 @@ const MyProductPage = () => {
             history.push('/signin')
         }
     }
+    
     useEffect(() => {
         if(!userData.hasOwnProperty('id')){
-            fetchUser().then(() => fetchProduct(user.id));
+            fetchUser().then(() => fetchProduct(user.id, currentPage));
         }else{
-            fetchProduct(userData.id)
+            fetchProduct(userData.id, currentPage)
         }
+        geNumPage();
             
     }, [user])
+
+    useEffect(() => {
+        fetchProduct(userData.id, currentPage);
+    }, [currentPage])
+    
     const open = () => {
         setIsEdit(false)
         setOpenForm(!openForm)
@@ -74,9 +83,10 @@ const MyProductPage = () => {
             setOpenEditForm(true)
         }
     }
+    const handleChangePage = (e, page) => setCurrentPage(page-1)
     return (
         <div>
-            <MenuBar avt={userData.avt} />
+            {/* <MenuBar avt={userData.avt} /> */}
             <div className="containerProduct">
                 {!openForm && !openEditForm &&
                 <div>
@@ -88,7 +98,10 @@ const MyProductPage = () => {
                     setProducts={setProducts} 
                     openEdit={openEdit} 
                     />
-                
+                    <Pagination
+                        className={classes.button} 
+                        onChange={handleChangePage} 
+                        count={numberOfPage} />
                 </div>}
                 {openForm && 
                 <AddProductForm 
@@ -106,6 +119,7 @@ const MyProductPage = () => {
                     setProducts={setProducts} 
                     close={close} />}
             </div>
+            
         </div>
     )
 }

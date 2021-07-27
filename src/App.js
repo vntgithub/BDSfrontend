@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,21 +7,40 @@ import {
 
 import SignupPage from "./pages/Signup.Page";
 import SignPage from "./pages/Signin.Page";
-import HomePage from "./pages/Home.Page";
-import MyProductPage from "./pages/MyProduct.Page";
+import ProductDetail from "./pages/ProductDetail.Page";
+import Dashboard from "./pages/Dashobard.Page";
+import { signInByToken } from "./slices/user";
+import userApi from "./apis/user.api";
+import { useDispatch } from "react-redux";
 
 import "./App.css";
 
 function App() {
+  const dispatch = useDispatch();
+  
+  const fetchUser = async () => {
+    const token = localStorage.getItem("token")
+    if(token){
+        const data = await userApi.signInByToken(token)
+        if(data.id){
+          dispatch(signInByToken(data))
+        }
+               
+    }
+}
+
+  useEffect(() => {
+    fetchUser();
+  }, [])
   return (
-    <Router>
+      <Router>
       <Switch>
-        <Route path="/" exact component={HomePage}/>
+        <Route path="/" exact component={Dashboard}/>
         <Route path="/signup" exact component={SignupPage}/>
         <Route path="/signin" exact component={SignPage}/>
-        <Route path="/myproduct" exact component={MyProductPage} />
+        <Route path="/productdetail/**" component={ProductDetail} />
       </Switch>
-    </Router>
+      </Router>
   );
 }
 

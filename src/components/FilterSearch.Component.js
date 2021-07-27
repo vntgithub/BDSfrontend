@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
     width: 150
   },
   price: {
-    margin: theme.spacing(0,5,2,2),
-      width: 180
+    margin: theme.spacing(0,5,2,4),
+    width: 180
   }
 }));
 
@@ -160,30 +160,29 @@ export default function SimpleSelect(props) {
     setFilter(newFilter) 
     setStreetId(event.target.value);
   }
+  
   const handleChangePrice = (event) => {
-    const newFilter = {...filter, priceRange: event.target.value}
+    let p = event.target.value;
+    const newFilter = {...filter, 
+      priceRange: p}
     setFilter(newFilter)   
-    setPrice(event.target.value)
+    setPrice(p)
   };
 
   const handleChangeSearchString = (e) => {
     const newFilter = {...filter, searchString: e.target.value}
     setFilter(newFilter)
   }
+
+  const getString = () => {
+    if(props.hasOwnProperty('isReportView'))
+      return 'Get file excel'
+    return 'Search'
+  }
   
 
   return (
     <Grid>
-        <Grid>
-        <FormControl>
-            <TextField 
-            onChange={handleChangeSearchString}
-            className={classes.search} 
-            id="outlined-basic" 
-            label="Search" 
-            variant="outlined" />
-        </FormControl>
-      </Grid>
       <Grid>
           <FormControl className={classes.formControl}>
             <InputLabel id="ProvinceCity">Province/City</InputLabel>
@@ -252,6 +251,14 @@ export default function SimpleSelect(props) {
             </FormControl>
       </Grid>
       <Grid>
+        <FormControl>
+            <TextField 
+            onChange={handleChangeSearchString}
+            className={classes.search} 
+            id="outlined-basic" 
+            label="Search" 
+            variant="outlined" />
+        </FormControl>
         <FormControl className={classes.price}>
             <InputLabel id="Street">Giá</InputLabel>
             <Select
@@ -267,12 +274,15 @@ export default function SimpleSelect(props) {
                 <MenuItem value={1}>{"500 triệu - 1tỷ"}</MenuItem>
                 <MenuItem value={2}>{"1tỷ - 1.5 tỷ"}</MenuItem>
                 <MenuItem value={3}>{"1.5 tỷ - 2 tỷ"}</MenuItem>
-                <MenuItem value={4}>{"Tren 2 tỷ"}</MenuItem>
+                <MenuItem value={4}>{"2 tỷ - 5 tỷ"}</MenuItem>
+                <MenuItem value={5}>{"5 tỷ - 10 tỷ"}</MenuItem>
+                <MenuItem value={6}>{"10 tỷ - 20 tỷ"}</MenuItem>
+                <MenuItem value={7}>{"> 20 tỷ"}</MenuItem>
             </Select>
         </FormControl>  
         <FormControl className={classes.button}>
             <Button onClick={search} variant="contained" color="primary">
-                Search
+                {getString()}
             </Button>
         </FormControl>
       </Grid>

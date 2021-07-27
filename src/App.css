@@ -10,4 +10,24 @@ body {
     display: flex;
     justify-content: center;
 }
-    
+.product {
+    padding: 5px;
+}
+.product:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    /* border: 3px solid transparent; */
+    z-index: 1;
+}
+
+.imgcontainer{
+    display: flex;
+    justify-content: center;
+    width: 354px;
+    height: 630px;
+    background-color: darkgray;
+    border-radius: 10px;
+}
+.imgcontainer img{
+    max-width: 354px;
+    max-height: 630px;
+}

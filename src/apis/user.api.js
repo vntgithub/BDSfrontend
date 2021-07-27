@@ -10,9 +10,14 @@ const userApi = {
         return res.data;
     },
     signInByToken: async (token) => {
-        // AxiosClient.defaults.headers.common = {'Authorization': `Bearer ${token}`}
-        const res = await AxiosClient.get("account")
-        return res.data;
+        AxiosClient.defaults.headers.common = {'Authorization': `Bearer ${token}`}
+        try{
+            const res = await AxiosClient.get("account")
+            return res.data;
+        }catch{
+            return {};
+        }
+        
     }
 }
 
