@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Container } from "@material-ui/core";
 import FilterSearch from "../components/FilterSearch.Component";
-import productApi from "../apis/product.api";
-import { makeStyles } from '@material-ui/core/styles';
 import { useSelector } from "react-redux";
+import DatePickers from "../components/DatePicker.Component";
+import TableContract from '../components/TableContract.Component'
 
 
 const ReportView = () => {
@@ -12,6 +12,7 @@ const ReportView = () => {
         searchString: null, priceRange: null, provinceCityId: null,
         districtId: null, wardId: null, streetId: null
     })
+    const [contracts, setContracts]  = useState([])
     
     const getArrPrice = (pR) => {
         switch(pR) {
@@ -26,7 +27,7 @@ const ReportView = () => {
         }
     }
     const search = async () => {
-        let url = "http://localhost:8080/product/report?";
+        let url = process.env.REACT_APP_URL_BACKEND + "product/report?";
         let filterObject = {
             user:{id: userId},
             content: {
@@ -53,11 +54,13 @@ const ReportView = () => {
             window.open(url.substr(0, url.length - 1), "_blank");
         
     }
+    
 
     return (
         <div>
             <Container>
-                <div className="listProduct">
+                <div >
+                    <h2>Report product by location</h2>
                     <div>
                         <FilterSearch 
                         filter={filter}
@@ -65,6 +68,13 @@ const ReportView = () => {
                         setFilter={setFilter}
                         search={search} />  
                     </div>
+                    <h2>Report list contract by month</h2>
+                    <div>
+                        <DatePickers setContracts={setContracts} />
+                    </div>
+                    {contracts.length > 0 &&
+                        <TableContract contracts={contracts} />
+                        }
                 </div>
                 
             </Container>

@@ -17,7 +17,7 @@ export default function RadioTypeProduct(props) {
     if(props.hasOwnProperty('defaultValue')){
       setValue(props.defaultValue)
     }
-  })
+  },[])
 
   return (
     <FormControl component="fieldset">

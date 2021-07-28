@@ -12,6 +12,9 @@ import { useSelector } from "react-redux";
 const useStyles = makeStyles((theme) => ({
     sort: {
       margin: theme.spacing(2),
+    }, 
+    icon: {
+        margin: theme.spacing(2)
     }
   }));
 
@@ -118,6 +121,9 @@ const HomePage = () => {
         setSortMethod(!sortMethod)
         setProducts(cloneData)
     }
+    const getIcon = (b) => {
+        return b ? "ASC" : "DESC"
+    }
     return (
         <div>
             <Container>
@@ -133,7 +139,9 @@ const HomePage = () => {
                     <div>
                         <div className={classes.sort}>
                             <Button onClick={sortProducts} variant="outlined">Sort by price</Button>
+                            <span className={classes.icon}>{getIcon(sortMethod)}</span>
                         </div>
+                        
                         {products.map((item, index) => <Product key={index} data={item} />)}
                         <Pagination 
                         onChange={handleChangePage} 

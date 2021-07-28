@@ -10,16 +10,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
 import RadioTypeProduct from '../components/RadioTypeProduct.Coponent';
 import AddressSelect from '../components/AddressSelect.Component';
 import ListCategory from './ListCategory.Component';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ImageButton from "../components/ImageUpload.Component"
-import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
-import { editProduct } from '../slices/product';
-import { DataUsage, NaturePeople } from '@material-ui/icons';
 import productApi from '../apis/product.api';
 
 function Copyright() {
@@ -72,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
 export default function EditProductForm(props) {
   const userId = useSelector(state => state.user.data.id)
   const { products, setProducts, p, index, close } = props
-  const dispatch = useDispatch()
   const classes = useStyles();
   const [files, setFiles] = useState([])
   const [err, setErr] = useState(false)

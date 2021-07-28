@@ -16,7 +16,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { ExitToApp } from '@material-ui/icons';
 import Avatar from '@material-ui/core/Avatar';
-import { MainListItems, secondaryListItems } from './ListItem.Component';
+import { MainListItems, SecondaryListItems } from './ListItem.Component';
 import { useSelector } from 'react-redux';
 const drawerWidth = 240;
 
@@ -191,7 +191,7 @@ const Menu = () => {
             <Divider />
             <List><MainListItems /></List>
             <Divider />
-            <List>{secondaryListItems}</List>
+            <List><SecondaryListItems/ ></List>
         </Drawer>}
         </div>
     )

@@ -1,7 +1,6 @@
 import { unwrapResult } from "@reduxjs/toolkit";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import MenuBar from "../components/MenuBar.Component"
 import AxiosClient from "../apis/AxiosClient";
 import { signInByToken } from "../slices/user";
 import { useHistory } from "react-router";

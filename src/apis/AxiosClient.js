@@ -2,7 +2,7 @@ import axios from "axios";
 
 const AxiosClient = axios.create(
     {
-        baseURL: 'http://localhost:8080/',
+        baseURL: process.env.REACT_APP_URL_BACKEND,
         timeout: 1000,
         headers: {'Access-Control-Allow-Origin': true}
     }

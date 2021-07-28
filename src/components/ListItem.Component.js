@@ -56,26 +56,17 @@ export const MainListItems = () => {
 );
 }
 
-export const secondaryListItems = (
+export const SecondaryListItems = () =>{
+  const getReport = () => window.open(process.env.REACT_APP_URL_BACKEND + "contract/listcustomer", "_blank");
+  return (
   <div>
     <ListSubheader inset>Saved reports</ListSubheader>
     <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
-      <ListItemText primary="Current month" />
+      <ListItemText onClick={getReport} primary="Customer report" />
     </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Last quarter" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Year-end sale" />
-    </ListItem>
+    
   </div>
-);
+)};

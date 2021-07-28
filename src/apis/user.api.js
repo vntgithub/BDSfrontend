@@ -18,6 +18,18 @@ const userApi = {
             return {};
         }
         
+    },
+    delete: async (id) => {
+        AxiosClient.delete(`user/${id}`)
+    },
+    getListUsers: async (p) => {
+        const res = await AxiosClient.get(`user/page/${p}`)
+        console.log(res.data)
+        return res.data;
+    },
+    countPage: async (id) => {
+        const res = await AxiosClient.get("user/countpage")
+        return res.data;
     }
 }
 

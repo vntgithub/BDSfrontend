@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import productApi from "../apis/product.api";
 import { Container, Grid } from "@material-ui/core";
-import { useSelector } from "react-redux";
 
 const ProductDetail = () => {
     const [product, setProduct] = useState({});
-    const avt = useSelector(state => state.user.data.avt)
     const getProduct = async (id) => {
         const data = await productApi.getProductById(id);
         setProduct(data)

@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import HomeView from './Home.View'
 import MyProductView from './MyProduct.View';
+import UserManagerView from './UsersManageMent.View';
 import ReportView from './Report.View'
 import Menu from '../components/Menu.Component'
 import { useSelector } from 'react-redux';
@@ -65,6 +66,7 @@ export default function Dashboard() {
                 {(view === 'home') &&<HomeView />}
                 {(view === 'myproduct') && <MyProductView />}
                 {(view === 'reports') && <ReportView />}
+                {(view === 'users') && <UserManagerView />}
               </Paper>
             </Grid>
           </Grid>
