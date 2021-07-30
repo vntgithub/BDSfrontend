@@ -11,14 +11,19 @@ import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import { useDispatch } from 'react-redux';
 import { changeView } from '../slices/view'
+import { useHistory } from 'react-router-dom';
 
 
 
 export const MainListItems = () => {
+  const history = useHistory()
   const dispatch = useDispatch()
-
   const handleChangeView = (view) => {
-    return () => dispatch(changeView(view))
+    return () => {
+      dispatch(changeView(view))
+      if(window.location.pathname !== '/')
+        history.push('/')
+    }
   }
   return(
   <div>

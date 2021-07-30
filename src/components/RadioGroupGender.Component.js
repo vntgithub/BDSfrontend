@@ -5,20 +5,27 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-export default function RadioButtonsGroup() {
-  const [value, setValue] = React.useState('female');
+export default function RadioButtonsGroup(props) {
+  const { setGender } = props
+  const [value, setValue] = React.useState(true);
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    if(event.target.value == "true"){
+      setValue(true);
+      setGender(true)
+    }else{
+      setValue(false);
+      setGender(false)
+    }
+    
   };
 
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">Gender</FormLabel>
       <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-        <FormControlLabel value="female" control={<Radio />} label="Female" />
-        <FormControlLabel value="male" control={<Radio />} label="Male" />
-        <FormControlLabel value="other" control={<Radio />} label="Other" />
+        <FormControlLabel value={true} control={<Radio />} label="Female" />
+        <FormControlLabel value={false} control={<Radio />} label="Male" />
       </RadioGroup>
     </FormControl>
   );

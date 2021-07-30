@@ -90,6 +90,7 @@ export default function SimpleSelect(props) {
   const handleChangeDistrict = (event) => setDistrictId(event.target.value);
   const handleChangeWard = (event) => setWardId(event.target.value);
   const handleChangeStreet = (event) => {
+    //Get data for add product feature
     if(props.hasOwnProperty('data')){
       let indexStreet = street.findIndex(item => item.id === event.target.value);
       let nameStreet = street[indexStreet].name;
@@ -113,6 +114,31 @@ export default function SimpleSelect(props) {
       }
       }})
     }
+    //Get data for sign-up feature
+    if(props.hasOwnProperty('setAddress')){
+      const { setAddress } = props
+      let indexStreet = street.findIndex(item => item.id === event.target.value);
+      let nameStreet = street[indexStreet].name;
+      setAddress({
+        provinceCity: {
+          id: pCId,
+          name: document.getElementById('city').innerText
+        },
+        district: {
+            id: districtId,
+            name: document.getElementById('district').innerText
+        },
+        ward:{
+            id: wardId,
+            name:document.getElementById('ward').innerText
+        },
+        street: {
+            id: event.target.value,
+            name: nameStreet
+      }
+      })
+    }
+
     setStreetId(event.target.value)
   }
 

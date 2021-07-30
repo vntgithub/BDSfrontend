@@ -6,7 +6,7 @@ const userApi = {
         return res.data;
     },
     signUp: async(signupData) => {
-        const res = await AxiosClient.post("account/signup", signupData);
+        const res = await AxiosClient.post("account", signupData);
         return res.data;
     },
     signInByToken: async (token) => {
@@ -24,7 +24,6 @@ const userApi = {
     },
     getListUsers: async (p) => {
         const res = await AxiosClient.get(`user/page/${p}`)
-        console.log(res.data)
         return res.data;
     },
     countPage: async (id) => {

@@ -18,6 +18,7 @@ import { ExitToApp } from '@material-ui/icons';
 import Avatar from '@material-ui/core/Avatar';
 import { MainListItems, SecondaryListItems } from './ListItem.Component';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -57,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    cursor: 'pointer'
   },
   drawerPaper: {
     position: 'relative',
@@ -111,6 +113,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Menu = () => {
     const classes = useStyles();
+    const history = useHistory()
     const avt = useSelector(state => state.user.data.avt)
     const [isGuest, setIsGuest] = useState(avt === "#");
     const [open, setOpen] = React.useState(true);
@@ -125,6 +128,7 @@ const Menu = () => {
       localStorage.removeItem('token')
       setIsGuest(true);
     }
+    const toHome = () => history.push('/')
 
     useEffect(() => {
       setIsGuest(avt === "#");
@@ -147,7 +151,12 @@ const Menu = () => {
             >
                 <MenuIcon />
             </IconButton>
-            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+            <Typography 
+            component="h1" 
+            variant="h6" 
+            color="inherit"
+            onClick={toHome} 
+            noWrap className={classes.title}>
                 BDS Project
             </Typography>
             {!isGuest &&
