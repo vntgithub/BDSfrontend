@@ -17,6 +17,9 @@ const userSlice = createSlice({
     reducers:{
         signInByToken (state, action) {
             state.data = action.payload;
+        },
+        logout (state) {
+            state.data = {avt: "#"}
         }
     },
     extraReducers:{
@@ -26,5 +29,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { signInByToken } = userSlice.actions
+export const { signInByToken, logout } = userSlice.actions
 export default userSlice.reducer;

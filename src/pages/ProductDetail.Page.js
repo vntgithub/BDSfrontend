@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import productApi from "../apis/product.api";
-import { Container, Grid } from "@material-ui/core";
+import { Container, Grid, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core";
+import ButtonDialog from '../components/ButtonDialog.Component'
 import Menu from '../components/Menu.Component'
+import contractApi from "../apis/contract.api";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ProductDetail = () => {
+    const userId = useSelector(state => state.user.data.id)
     const [product, setProduct] = useState(null);
     const classes = useStyles();
     const [currentUrl, setCurrentUrl] = useState('#')
@@ -56,6 +60,12 @@ const ProductDetail = () => {
     const changeShowImg = (url) => {
         return function () {
             setCurrentUrl(url);
+        }
+    }
+    const createContract = () => {
+        if(userId){
+            setProduct({...product, hasContract: true})
+            contractApi.create(userId, product.id)
         }
     }
     useEffect(() => {
@@ -101,6 +111,16 @@ const ProductDetail = () => {
                                 </div>
                                 <h3>Funiture: {product.funiture}</h3>
                                 <h3>Legal information: {product.legalInfor}</h3>
+                                <div>
+                                    {!product.hasContract && userId &&
+                                    <Button onClick={createContract} variant="contained">Create contract</Button>
+                                    }
+                                    {product.hasContract &&
+                                    <Button variant="contained" disabled>Has contract</Button>}
+                                    {!product.hasContract && !userId &&
+                                        <ButtonDialog />
+                                    }
+                                </div>
                             </Grid>
                     </Grid>}
                     </Container>

@@ -17,8 +17,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { ExitToApp } from '@material-ui/icons';
 import Avatar from '@material-ui/core/Avatar';
 import { MainListItems, SecondaryListItems } from './ListItem.Component';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { changeView } from '../slices/view';
+import { logout } from '../slices/user'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -113,8 +115,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Menu = () => {
     const classes = useStyles();
+    const dispatch = useDispatch()
     const history = useHistory()
-    const avt = useSelector(state => state.user.data.avt)
+    const userDataInStore = useSelector(state => state.user.data)
+    const avt = userDataInStore.avt
+    const role = userDataInStore.role
     const [isGuest, setIsGuest] = useState(avt === "#");
     const [open, setOpen] = React.useState(true);
 
@@ -122,11 +127,12 @@ const Menu = () => {
 
     const handleDrawerClose = () => setOpen(false);
 
-    
-    
-    const logout = () => {
+    const handleLogout = () => {
       localStorage.removeItem('token')
+      dispatch(logout())
+      dispatch(changeView('home'))
       setIsGuest(true);
+      history.push('/')
     }
     const toHome = () => history.push('/')
 
@@ -167,7 +173,7 @@ const Menu = () => {
                   </Badge>
               </IconButton>
               <Avatar className={classes.marginLeftRigth} alt="user-avt" src={avt} />
-              <ExitToApp onClick={logout} className={classes.logout} />
+              <ExitToApp onClick={handleLogout} className={classes.logout} />
             </span>}
             {isGuest &&
             <span className={classes.root}>
@@ -200,7 +206,7 @@ const Menu = () => {
             <Divider />
             <List><MainListItems /></List>
             <Divider />
-            <List><SecondaryListItems/ ></List>
+            {role === 'ROLE_ADMIN' && <List><SecondaryListItems /></List>}
         </Drawer>}
         </div>
     )
